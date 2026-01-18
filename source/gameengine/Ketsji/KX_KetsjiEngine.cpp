@@ -146,42 +146,41 @@ const std::string KX_KetsjiEngine::m_renderQueriesLabels[QUERY_MAX] = {
 	"Time:" // QUERY_TIME
 };
 
-/**
- * Constructor of the Ketsji Engine
- */
+// Constructor of the Ketsji Engine
 KX_KetsjiEngine::KX_KetsjiEngine()
-	:m_canvas(nullptr),
-	m_rasterizer(nullptr),
-	m_converter(nullptr),
-	m_networkMessageManager(nullptr),
+	:m_canvas(nullptr)
+	,m_rasterizer(nullptr)
+	,m_converter(nullptr)
+	,m_networkMessageManager(nullptr)
 #ifdef WITH_PYTHON
-	m_pyprofiledict(PyDict_New()),
+	,m_pyprofiledict(PyDict_New())
 #endif
-	m_inputDevice(nullptr),
-	m_scenes(new EXP_ListValue<KX_Scene>()),
-	m_bInitialized(false),
-	m_flags(AUTO_ADD_DEBUG_PROPERTIES),
-	m_frameTime(0.0f),
-	m_clockTime(0.0f),
-	m_timescale(1.0f),
-	m_previousRealTime(0.0f),
-	m_maxLogicFrame(5),
-	m_maxPhysicsFrame(5),
-	m_ticrate(DEFAULT_LOGIC_TIC_RATE),
-	m_anim_framerate(25.0),
-	m_doRender(true),
-	m_exitKey(SCA_IInputDevice::ENDKEY),
-	m_logger(KX_TimeCategoryLogger(m_clock, 25)),
-	m_average_framerate(0.0),
-	m_showBoundingBox(KX_DebugOption::DISABLE),
-	m_showArmature(KX_DebugOption::DISABLE),
-	m_showCameraFrustum(KX_DebugOption::DISABLE),
-	m_showShadowFrustum(KX_DebugOption::DISABLE),
-	m_globalsettings({0}),
-	m_taskscheduler(BLI_task_scheduler_create(TASK_SCHEDULER_AUTO_THREADS))
+	,m_inputDevice(nullptr)
+	,m_scenes(new EXP_ListValue<KX_Scene>())
+	,m_bInitialized(false)
+	,m_flags(AUTO_ADD_DEBUG_PROPERTIES)
+	,m_frameTime(0.0)
+	,m_clockTime(0.0)
+	,m_timescale(1.0)
+	,m_previousRealTime(0.0)
+	,m_deltaTime(0.0)
+	,m_maxLogicFrame(5)
+	,m_maxPhysicsFrame(5)
+	,m_ticrate(DEFAULT_LOGIC_TIC_RATE)
+	,m_anim_framerate(25.0)
+	,m_doRender(true)
+	,m_exitKey(SCA_IInputDevice::ENDKEY)
+	,m_logger(KX_TimeCategoryLogger(m_clock, 25))
+	,m_average_framerate(0.0)
+	,m_showBoundingBox(KX_DebugOption::DISABLE)
+	,m_showArmature(KX_DebugOption::DISABLE)
+	,m_showCameraFrustum(KX_DebugOption::DISABLE)
+	,m_showShadowFrustum(KX_DebugOption::DISABLE)
+	,m_globalsettings({0})
+	,m_taskscheduler(BLI_task_scheduler_create(TASK_SCHEDULER_AUTO_THREADS))
 {
 	for (int i = tc_first; i < tc_numCategories; i++) {
-		m_logger.AddCategory((KX_TimeCategory)i);
+		m_logger.AddCategory(static_cast<KX_TimeCategory>(i));
 	}
 
 	m_renderQueries.emplace_back(RAS_Query::SAMPLES);
@@ -379,6 +378,7 @@ bool KX_KetsjiEngine::NextFrame()
 //	CM_Debug("dt = " << dt << ", deltatime = " << deltatime << ", frames = " << frames);
 
 	double framestep = timestep;
+	m_deltaTime = framestep;
 
 	if (frames > m_maxPhysicsFrame) {
 		m_frameTime += (frames - m_maxPhysicsFrame) * timestep;
@@ -1374,6 +1374,11 @@ void KX_KetsjiEngine::SetFlag(FlagType flag, bool enable)
 	else {
 		m_flags = (FlagType)(m_flags & ~flag);
 	}
+}
+
+double KX_KetsjiEngine::GetDeltaTime(bool scaled) const
+{
+	return scaled ? m_deltaTime : (m_deltaTime / m_timescale);
 }
 
 double KX_KetsjiEngine::GetClockTime() const

@@ -474,6 +474,17 @@ static PyObject *gPySetUseExternalClock(PyObject *, PyObject *args)
 	Py_RETURN_NONE;
 }
 
+static PyObject *gPyGetDeltaTime(PyObject *, PyObject *args)
+{
+	int scaled = 1;
+
+	if (!PyArg_ParseTuple(args, "|p:deltaTime", &scaled)) {
+		return PyFloat_FromDouble(0.0);
+	}
+
+	return PyFloat_FromDouble(KX_GetActiveEngine()->GetDeltaTime((bool)scaled));
+}
+
 static PyObject *gPyGetClockTime(PyObject *)
 {
 	return PyFloat_FromDouble(KX_GetActiveEngine()->GetClockTime());
@@ -845,6 +856,7 @@ static struct PyMethodDef game_methods[] = {
 	{"getRender", (PyCFunction)gPyGetRender, METH_NOARGS, (const char *)"get the global render flag value"},
 	{"getUseExternalClock", (PyCFunction)gPyGetUseExternalClock, METH_NOARGS, (const char *)"Get if we use the time provided by an external clock"},
 	{"setUseExternalClock", (PyCFunction)gPySetUseExternalClock, METH_VARARGS, (const char *)"Set if we use the time provided by an external clock"},
+	{"deltaTime", (PyCFunction)gPyGetDeltaTime, METH_VARARGS, (const char *)"Get elapsed time between frames"},
 	{"getClockTime", (PyCFunction)gPyGetClockTime, METH_NOARGS, (const char *)"Get the last BGE render time. "
 	 "The BGE render time is the simulated time corresponding to the next scene that will be renderered"},
 	{"setClockTime", (PyCFunction)gPySetClockTime, METH_VARARGS, (const char *)"Set the BGE render time. "

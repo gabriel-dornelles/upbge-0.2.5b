@@ -197,6 +197,7 @@ private:
 	/// time scaling parameter. if > 1.0, time goes faster than real-time. If < 1.0, times goes slower than real-time.
 	double m_timescale;
 	double m_previousRealTime;
+	double m_deltaTime;
 
 	/// maximum number of consecutive logic frame
 	int m_maxLogicFrame;
@@ -390,6 +391,10 @@ public:
 	bool GetFlag(FlagType flag) const;
 	/// Enable or disable a set of flags.
 	void SetFlag(FlagType flag, bool enable);
+
+	/// @brief Get elapsed time between frames.
+	/// @return Elapsed time since previous frame.
+	double KX_KetsjiEngine::GetDeltaTime(bool scaled = true) const;
 
 	/*
 	 * Returns next render frame game time
