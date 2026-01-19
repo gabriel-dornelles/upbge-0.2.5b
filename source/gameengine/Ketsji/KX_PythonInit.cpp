@@ -476,13 +476,13 @@ static PyObject *gPySetUseExternalClock(PyObject *, PyObject *args)
 
 static PyObject *gPyGetDeltaTime(PyObject *, PyObject *args)
 {
-	int scaled = 1;
+	PyObject *scaled = Py_True;
 
-	if (!PyArg_ParseTuple(args, "|p:deltaTime", &scaled)) {
-		return PyFloat_FromDouble(0.0);
+	if (!PyArg_ParseTuple(args, "|O!:deltaTime", &PyBool_Type, &scaled)) {
+		return NULL;
 	}
 
-	return PyFloat_FromDouble(KX_GetActiveEngine()->GetDeltaTime((bool)scaled));
+	return PyFloat_FromDouble(KX_GetActiveEngine()->GetDeltaTime(scaled == Py_True));
 }
 
 static PyObject *gPyGetClockTime(PyObject *)
