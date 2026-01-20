@@ -32,13 +32,19 @@
 #define UPBGE_VERSION           2
 #define UPBGE_SUBVERSION        5
 
+#define UPBGE_LEGACY_MAJOR 0
+#define UPBGE_LEGACY_MINOR 0
+#define UPBGE_LEGACY_PATCH 1
+
 /* used by packaging tools */
 /* can be left blank, otherwise a,b,c... etc with no quotes */
 #define BLENDER_VERSION_CHAR
 /* alpha/beta/rc/release, docs use this */
 #define BLENDER_VERSION_CYCLE   alpha
 
-extern char versionstr[]; /* from blender.c */
-extern char upbge_versionstr[]; /* from blender.c */
+/* from blender.c */
+extern char versionstr[]; 
+extern char upbge_versionstr[];
+extern char upbge_legacy_versionstr[];
 
 #endif  /* __BKE_BLENDER_VERSION_H__ */
