@@ -35,7 +35,8 @@ KX_PythonComponent::KX_PythonComponent(const std::string& name)
 	:m_pc(nullptr),
 	m_gameobj(nullptr),
 	m_name(name),
-	m_init(false)
+	m_init(false),
+	m_hasError(false)
 {
 }
 
@@ -95,6 +96,7 @@ void KX_PythonComponent::Start()
 
 	if (PyErr_Occurred()) {
 		PyErr_Print();
+		m_hasError = true;
 	}
 
 	Py_XDECREF(arg_dict);
@@ -108,9 +110,14 @@ void KX_PythonComponent::Update()
 		m_init = true;
 	}
 
+	if (m_hasError) {
+		return;
+	}
+
 	PyObject *pycomp = GetProxy();
 	if (!PyObject_CallMethod(pycomp, "update", "")) {
 		PyErr_Print();
+		m_hasError = true;
 	}
 }
 

@@ -39,6 +39,7 @@ private:
 	KX_GameObject *m_gameobj;
 	std::string m_name;
 	bool m_init;
+	bool m_hasError;
 
 public:
 	KX_PythonComponent(const std::string& name);

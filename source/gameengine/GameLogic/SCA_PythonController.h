@@ -50,6 +50,7 @@ class SCA_PythonController : public SCA_IController
 	int						m_function_argc;
 	bool					m_bModified;
 	bool					m_debug;	/* use with SCA_PYEXEC_MODULE for reloading every logic run */
+	bool					m_hasError;
 	int						m_mode;
 
 	

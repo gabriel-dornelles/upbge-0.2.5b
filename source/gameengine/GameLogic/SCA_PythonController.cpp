@@ -61,6 +61,7 @@ SCA_PythonController::SCA_PythonController(SCA_IObject *gameobj, int mode)
 	m_function_argc(0),
 	m_bModified(true),
 	m_debug(false),
+	m_hasError(false),
 	m_mode(mode)
 #ifdef WITH_PYTHON
 	, m_pythondictionary(nullptr)
@@ -222,6 +223,10 @@ PyAttributeDef SCA_PythonController::Attributes[] = {
 
 void SCA_PythonController::ErrorPrint(const char *error_msg)
 {
+	if (m_hasError) {
+		return;
+	}
+
 	// If GetParent() is nullptr, then most likely the object this controller
 	// was attached to is gone (e.g., removed by LibFree()). Also, GetName()
 	// can be a bad pointer if GetParent() is nullptr, so better be safe and
@@ -235,6 +240,8 @@ void SCA_PythonController::ErrorPrint(const char *error_msg)
 	 * has already dealocated the pointer */
 	PySys_SetObject("last_traceback", nullptr);
 	PyErr_Clear(); /* just to be sure */
+
+	m_hasError = true;
 }
 
 bool SCA_PythonController::Compile()
