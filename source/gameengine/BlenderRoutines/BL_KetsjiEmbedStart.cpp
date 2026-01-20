@@ -35,6 +35,8 @@
 #  pragma warning (disable:4786)
 #endif
 
+#include <termcolor.hpp>
+
 #include "KX_PythonInit.h"
 #include "KX_Globals.h"
 
@@ -221,10 +223,12 @@ extern "C" void StartKetsjiShell(struct bContext *C, struct ARegion *ar, rcti *c
 #endif  // WITH_PYTHON
 
 		launcher.InitEngine();
+		
+		std::cout << termcolor::bold << termcolor::cyan << ">> UPBGE Engine Started" << termcolor::reset << "\n";
 
-		CM_Message(std::endl << "Blender Game Engine Started");
 		exitInfo = launcher.EngineMainLoop();
-		CM_Message("Blender Game Engine Finished");
+
+		std::cout << termcolor::bold << termcolor::yellow << ">> UPBGE Engine Finished" << termcolor::reset << "\n";
 
 		gs = *launcher.GetGlobalSettings();
 
