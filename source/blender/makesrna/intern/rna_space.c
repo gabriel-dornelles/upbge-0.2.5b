@@ -1125,12 +1125,12 @@ static const EnumPropertyItem *rna_SpaceProperties_context_itemf(bContext *UNUSE
 		RNA_enum_items_add_value(&item, &totitem, buttons_context_items, BCONTEXT_BONE_CONSTRAINT);
 	}
 
-	if (sbuts->pathflag & (1 << BCONTEXT_MATERIAL)) {
-		RNA_enum_items_add_value(&item, &totitem, buttons_context_items, BCONTEXT_MATERIAL);
-	}
-
 	if (sbuts->pathflag & (1 << BCONTEXT_GAME)) {
 		RNA_enum_items_add_value(&item, &totitem, buttons_context_items, BCONTEXT_GAME);
+	}
+
+	if (sbuts->pathflag & (1 << BCONTEXT_MATERIAL)) {
+		RNA_enum_items_add_value(&item, &totitem, buttons_context_items, BCONTEXT_MATERIAL);
 	}
 
 	if (sbuts->pathflag & (1 << BCONTEXT_TEXTURE)) {
