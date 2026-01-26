@@ -46,10 +46,18 @@ class GAME_PT_game_components(GameButtonsPanel, bpy.types.Panel):
 
         for i, c in enumerate(game.components):
             box = layout.box()
-            row = box.row()
+            row = box.row(align=True)
+
             row.prop(c, "show_expanded", text="", emboss=False)
             row.label(text=c.name)
+
             row.operator("logic.python_component_reload", text="", icon='RECOVER_LAST').index = i
+            row.separator()
+            
+            row.operator("logic.python_component_move_up", text="", icon="TRIA_UP").index = i
+            row.operator("logic.python_component_move_down", text="", icon="TRIA_DOWN").index = i
+            
+            row.separator()
             row.operator("logic.python_component_remove", text="", icon='X').index = i
 
             if c.show_expanded and len(c.properties) > 0:
