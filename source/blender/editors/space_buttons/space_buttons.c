@@ -150,6 +150,8 @@ static void buttons_main_region_draw(const bContext *C, ARegion *ar)
 		ED_region_panels(C, ar, "data", sbuts->mainb, vertical);
 	else if (sbuts->mainb == BCONTEXT_MATERIAL)
 		ED_region_panels(C, ar, "material", sbuts->mainb, vertical);
+	else if (sbuts->mainb == BCONTEXT_GAME)
+		ED_region_panels(C, ar, "game", sbuts->mainb, vertical);
 	else if (sbuts->mainb == BCONTEXT_TEXTURE)
 		ED_region_panels(C, ar, "texture", sbuts->mainb, vertical);
 	else if (sbuts->mainb == BCONTEXT_PARTICLE)
@@ -296,6 +298,9 @@ static void buttons_area_listener(bScreen *UNUSED(sc), ScrArea *sa, wmNotifier *
 					ED_area_tag_redraw(sa);
 					break;
 			}
+			break;
+		case NC_LOGIC:
+			buttons_area_redraw(sa, BCONTEXT_GAME);
 			break;
 		case NC_GEOM:
 			switch (wmn->data) {
